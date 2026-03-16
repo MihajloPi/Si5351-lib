@@ -27,7 +27,10 @@
 #define SI5351_H_
 
 #define SI5351_I2C_ADDRESS		0xC0		//default I2C address of Si5351
-#define SI5351_I2C_PERIPHERAL	I2C1		//default I2C interface
+// SI5351_I2C_PERIPHERAL must be a pointer to your HAL I2C handle (I2C_HandleTypeDef*).
+// CubeMX generates this as hi2c1, hi2c2, etc. Change to match your project.
+extern I2C_HandleTypeDef hi2c1;
+#define SI5351_I2C_PERIPHERAL	(&hi2c1)	//default I2C HAL handle
 
 #define SI5351_XTAL_FREQ		25000000	// sets default value, 25000000 for 25 MHz, 27000000 for 27 MHz
 #define SI5351_CLKIN_FREQ		0			// set in Hz
@@ -437,7 +440,7 @@ typedef struct
 	EnableState Fanout_XO_EN;
 	EnableState Fanout_CLKIN_EN;
 
-	I2C_TypeDef *I2Cx;				//the I2C interface that will be used
+	I2C_HandleTypeDef *I2Cx;		//the HAL I2C handle that will be used (e.g. &hi2c1)
 	uint8_t HW_I2C_Address;			//I2C address of the Si5351 for the packages with A0 pin
 									//(also, some duds with strange address reported)
 	Si5351_OSCConfigTypeDef OSC;	//Oscillator, CLKIN and VCXO settings
